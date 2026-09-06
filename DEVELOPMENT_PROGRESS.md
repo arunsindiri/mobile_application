@@ -25,15 +25,21 @@ vidtalk/
     │   ├── main.py
     │   ├── database/
     │   │   ├── __init__.py
-    │   │   └── connection.py
-    │   └── models/
+    │   │   ├── connection.py
+    │   │   └── session.py
+    │   ├── models/
+    │   │   ├── __init__.py
+    │   │   └── user.py
+    │   ├── routes/
+    │   │   ├── __init__.py
+    │   │   └── users.py
+    │   └── schemas/
     │       ├── __init__.py
     │       └── user.py
     ├── migrations/
     │   ├── versions/
-    │   ├── env.py
-    │   ├── README
-    │   └── script.py.mako
+    │   │   └── fc4d66409814_create_users_table.py
+    │   └── env.py
     ├── .env
     ├── .gitignore
     └── alembic.ini
@@ -90,6 +96,28 @@ vidtalk/
     - Successfully applied the migration.
     - Verified the `users` table exists directly in PostgreSQL.
 
+12. **Database session — COMPLETE**
+    - Created `app/database/session.py`.
+    - Created `SessionLocal` bound to the engine.
+    - Created `get_db()` dependency with `yield` pattern.
+    - Learned database session lifecycle (`try`/`finally`).
+
+13. **Pydantic schemas — COMPLETE**
+    - Created `app/schemas/user.py`.
+    - `UserCreate` — request body for creating a user.
+    - `UserResponse` — response body with `id`, `google_id`, `display_name`.
+    - `UserUpdate` — request body for updating `display_name`.
+
+14. **Users CRUD API — COMPLETE**
+    - Created `app/routes/users.py` with `APIRouter(prefix="/users")`.
+    - `POST /users/` — create a new user.
+    - `GET /users/` — list all users.
+    - `GET /users/{user_id}` — get a single user by ID (404 if not found).
+    - `PUT /users/{user_id}` — update a user's display name.
+    - `DELETE /users/{user_id}` — delete a user.
+    - Connected API → Pydantic schemas → database session → SQLAlchemy → PostgreSQL.
+    - Registered the router in `app/main.py`.
+
 ## Current Database
 
 Database: `vidtalk`
@@ -112,16 +140,16 @@ No real users have been created yet.
 
 ## Current Position
 
-The FastAPI backend foundation, PostgreSQL connection, SQLAlchemy setup, Alembic configuration, and `users` table are working.
+The FastAPI backend foundation is solid: routing, PostgreSQL connection, SQLAlchemy session management, Alembic migrations, and full CRUD for users are all working and testable via Swagger at `/docs`.
+
+The current users table contains the columns `id`, `google_id`, and `display_name`. The temporary `GET /videos` endpoint still returns hardcoded data, and no real video/comment functionality exists yet. No authentication, Google OAuth, or Cloudinary integration has been started, and the Android app has not been created.
 
 ## Exact Next Step
 
-Create and understand the SQLAlchemy database session in `app/database/session.py`.
-
-After that, build `POST /users` using this flow:
+Handle duplicate `google_id` errors gracefully (unique constraint handling) and then build the Video model:
 
 ```text
-Android / API Client → FastAPI → Request Schema → Database Session → SQLAlchemy → PostgreSQL → users table
+Video model → Alembic migration → Video schemas → Video CRUD API → PostgreSQL videos table
 ```
 
 ## Backend Roadmap
@@ -137,11 +165,11 @@ Android / API Client → FastAPI → Request Schema → Database Session → SQL
 9. User model — COMPLETE
 10. Alembic setup — COMPLETE
 11. Users table migration — COMPLETE
-12. Database session
-13. `POST /users`
-14. `GET /users`
-15. `GET /users/{id}`
-16. Improve User model
+12. Database session — COMPLETE
+13. `POST /users` — COMPLETE
+14. `GET /users` — COMPLETE
+15. `GET /users/{id}` — COMPLETE
+16. Improve User model (duplicate `google_id` handling)
 17. Video model
 18. Video APIs
 19. Comment model
@@ -158,7 +186,7 @@ Android / API Client → FastAPI → Request Schema → Database Session → SQL
 
 ## Android Roadmap
 
-1. Create Android Studio project
+1. Create Android Studio project — NOT STARTED
 2. Kotlin setup
 3. Jetpack Compose setup
 4. MVVM architecture

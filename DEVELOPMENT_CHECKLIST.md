@@ -54,8 +54,10 @@
    - Learned database session lifecycle
    - Learned `yield`, `try`, `finally`
 
-9. **Pydantic**
+9. **Pydantic schemas**
    - Created `UserCreate` schema
+   - Created `UserResponse` schema
+   - Created `UserUpdate` schema
    - Learned difference between:
      - Schema → API data
      - Model → Database data
@@ -63,6 +65,10 @@
 10. **User API**
     - Created `/users` router
     - Created `POST /users`
+    - Created `GET /users` (list all)
+    - Created `GET /users/{user_id}` (get by ID)
+    - Created `PUT /users/{user_id}` (update display name)
+    - Created `DELETE /users/{user_id}` (delete user)
     - Connected API → SQLAlchemy → PostgreSQL
     - Tested using Swagger
     - Verified data in PostgreSQL
@@ -73,9 +79,9 @@ We'll build the application gradually.
 
 ### 👤 Users
 
-- `GET /users`
-- `GET /users/{id}`
-- Response schemas
+- ~~`GET /users`~~ ✅
+- ~~`GET /users/{id}`~~ ✅
+- ~~Response schemas~~ ✅
 - Handle duplicate `google_id`
 - Google OAuth login
 - User authentication/session handling
