@@ -86,6 +86,83 @@ We'll build the application gradually.
 - Google OAuth login
 - User authentication/session handling
 
+## 🔐 Google Cloud Setup — Step 20
+
+**Authentication approach:** Google's current Android documentation deprecates the older `GoogleSignInOptions` APIs and recommends **Credential Manager** for authentication. We'll use the current Android authentication approach, not an outdated tutorial.
+
+### Google Cloud setup (no code yet)
+
+We need to create/configure:
+
+```
+Google Cloud
+│
+├── Google Cloud Project
+│
+├── OAuth configuration
+│
+├── Android Client ID
+│   ├── Package name
+│   └── SHA-1
+│
+└── Web Client ID
+    └── Used as the server/client ID for the ID token
+```
+
+Google's documentation specifically requires an **Android client** and a **server/web client** for the backend ID-token flow.
+
+The Android app will eventually request an ID token, send it to FastAPI, and our backend will verify it. Google identifies the account using the token's `sub` value, which is the stable unique identifier.
+
+### 🔁 Our flow (eventually)
+
+```
+Android
+   │
+   │ Sign in with Google
+   ▼
+Google
+   │
+   │ ID Token
+   ▼
+FastAPI
+   │
+   │ Verify token
+   ▼
+Google identity (sub)
+   │
+   ▼
+PostgreSQL
+   │
+   ▼
+VidTalk User
+```
+
+### 📱 One thing we need from Android
+
+The Android OAuth client requires the app's **package name** and **SHA-1 signing certificate** (Google confirms SHA-1 is required for services such as Google Sign-In).
+
+Since we haven't created the Android project yet, **we will not create the Android OAuth credentials yet.**
+
+### ✅ Our adjusted order
+
+```
+Backend CRUD                 ✅
+       ↓
+Create Android project       ⬅️ next
+       ↓
+Get package name + SHA-1
+       ↓
+Google Cloud OAuth setup
+       ↓
+Android Google login
+       ↓
+FastAPI token verification
+       ↓
+Create/find user
+```
+
+**Next step — Step 20A:** Create the VidTalk Android project in Android Studio. 📱
+
 ### 🎥 Videos
 
 - Create Video model
